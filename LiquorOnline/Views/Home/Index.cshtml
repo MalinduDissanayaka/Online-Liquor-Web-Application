@@ -1,0 +1,101 @@
+﻿@model IEnumerable<LiquorOnline.Models.Product>
+
+@{
+    ViewData["Title"] = "Home";
+
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+<h5>Search Product</h5>
+<form class="justify-content-center" asp-controller="Home" asp-action="Index" method="get">
+    <div class="input-group rounded mb-3 w-50">
+        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="SearchString" />
+        <span class="input-group-text border-0" id="search-addon">
+            <button type="submit" class="btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </span>
+    </div>
+</form>
+
+<div class="col-12 p-3  ">
+    <div id="carouselExampleIndicators" class="carousel slide mb-3" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner h-100">
+            <div class="carousel-item h-50 active">
+                <img src="~/images/1.jpg" class="d-block w-100 h-50" alt="construction">
+            </div>
+            <div class="carousel-item h-100">
+                <img src="~/images/2.jpg" class="d-block w-100 h-50" alt="construction">
+            </div>
+            <div class="carousel-item h-100">
+                <img src="~/images/3.jpg" class="d-block w-100 h-50" alt="construction">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+
+<section style="background-color: #BAB998;">
+    <div class="container py-3">
+        <div class="row mb-4">
+            @foreach (var item in Model)
+            {
+                <div class="card mx-auto col-md-12 col-lg-3 mt-3">
+                    <img class='mx-auto img-thumbnail'
+                         src="../images/@item.ImageUrl"
+                         width="250" height="250"/>
+                    <style>
+                        /* Add this CSS within a <style> block in the head section of your HTML or in an external CSS file */
+                        .btn.cart {
+                            background-color: red;
+                            color: white;
+                            /* You can add more styling properties as needed */
+                        }
+                    </style>
+                    <div class="card-body text-center mx-auto">
+                        <div class='cvp'>
+                            <h5 class="card-title font-weight-bold">@item.Productname</h5>
+                            <p class="card-text">Rs @item.Deliver</p>
+                            <a asp-action="Details" asp-route-id="@item.ProductId" class="btn details px-auto">view details</a><br />
+                            <a href="#" class="btn cart px-auto">Buy</a>
+                        </div>
+                    </div>
+                </div>              
+            }
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    @if(pager.TotalPages > 0)
+    {
+        <ul class="pagination justify-content-end">
+            @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+            {
+                <li class="page-item @(pge == pager.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-controller="Products" asp-action="Index" asp-route-pg="@pge">@pge</a>
+                </li>
+            }
+        </ul>
+    }
+</div>
